@@ -22,3 +22,18 @@ jobs:
             echo "Linter Failed: Thiếu thẻ title."
             exit 1
           fi
+
+  deploy:
+    needs: build # Chờ job build (CI) thành công mới chạy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Cho phép đẩy code lên nhánh gh-pages
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy lên GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./ # Đẩy toàn bộ thư mục hiện tại lên web
